@@ -1,0 +1,6 @@
+{
+    "name": "config",
+    "enable" : 1,
+    "path": "/path/to/needed",
+    "timeout": 600 
+}
