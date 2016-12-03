@@ -1,0 +1,23 @@
+{
+    "log": {
+		 "filename": "data.log"
+		,"path": "log/"
+		,"level": 10
+		,"max_filesize": 104857600
+	}
+
+    ,"amazon": {
+		 "search_url_prefix": "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords="
+		,"keywords": ["led light", "iphone 7", "C++ Primer"]
+	}
+
+	,"email":{
+		 "smtp_host": ""
+		,"imap_host": ""
+		,"user": ""
+		,"password": ""
+	}
+	,"phantomjs": "/usr/local/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
+	,"timeout": 600
+	,"temp_dir": "temp"
+}

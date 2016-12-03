@@ -17,6 +17,7 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText 
 
+from logger import g_logger
 
 class CaptchaSmtper:
 
@@ -153,7 +154,8 @@ class CaptchaImap4er:
 			if(charset != 'utf-8'):
 				text = text.decode(charset).encode('utf-8')
 		else:
-			print "ignore maintype = '%s'" % maintype 
+			#print "ignore maintype = '%s'" % maintype 
+			g_logger.warning("ignore maintype = '%s'" % maintype)
 		return text
 
 	def captcha_mail_receive(self, sender, receiver, subject0):
@@ -171,9 +173,9 @@ class CaptchaImap4er:
 			mailid_list = data[0].split()
 			count = len(mailid_list)
 			fetch_list = reversed(xrange(count-10, count+1))
-			print "mailid_list length: %d, %s" % (len(mailid_list), mailid_list[3])
+			#print "mailid_list length: %d, %s" % (len(mailid_list), mailid_list[3])
+			g_logger.warning("mailid_list length: %d, %s" % (len(mailid_list), mailid_list[3]))
 			for num in fetch_list:
-				#print num
 				result, data = self.imap4_obj.fetch(num, '(RFC822)')
 				raw_email = data[0][1]
 				email_message = email.message_from_string(raw_email)
@@ -194,16 +196,20 @@ class CaptchaImap4er:
 
 				msg_from = email.utils.parseaddr(email_message['From'])
 				msg_to = email.utils.parseaddr(email_message['To'])
-				print "Subject: %s" % (subject)
-				print "From: %s" % (msg_from[1])
-				print "To: %s" % (msg_to[1])
+				#print "Subject: %s" % (subject)
+				#print "From: %s" % (msg_from[1])
+				#print "To: %s" % (msg_to[1])
+				g_logger.info("Subject: %s" % (subject))
+				g_logger.info("From: %s" % (msg_from[1]))
+				g_logger.info("To: %s" % (msg_to[1]))
 
 				text = self.get_text_from_payload(email_message)
 				buf = StringIO.StringIO(text)
 				captcha = buf.readline().splitlines()[0]
-				print "captcha = '%s'" % captcha 
+				#print "captcha = '%s'" % captcha 
+				g_logger.info("captcha = '%s'" % captcha)
 				#print "Body: \n%s" % text
-				print "==========================================="
+				#print "==========================================="
 				break # finished if found the reply email
 
 			self.imap4_obj.close()
@@ -213,7 +219,8 @@ class CaptchaImap4er:
 
 		except SMTPException as err:
 			err_msg = err[1].decode('GBK')
-			print "Send email failed: [%d]%s" % (err[0], err_msg)
+			#print "Send email failed: [%d]%s" % (err[0], err_msg)
+			g_logger.error("Send email failed: [%d]%s" % (err[0], err_msg))
 			return '-1'
 
 def unit_test_1(argv):
@@ -243,8 +250,13 @@ def unit_test_2(argv):
 
 	#mailer.simple_send("519916178@qq.com", "me@liudonghua.net", "Hello World", "Hi all, good day!")
 	captcha = mailer.captcha_mail_receive("519916178@qq.com", "me@liudonghua.net", "亚马逊验证码-请10分钟内回复")
-	print "[######] %s" % (captcha)
 
-#unit_test_1(sys.argv)
-unit_test_2(sys.argv)
+def unit_test_3():
+	captcha = 'xmkleo'
+	g_logger.info("test log in captcha mailer. %s" % (captcha))
 
+def __init__():
+	#unit_test_1(sys.argv)
+	#unit_test_2(sys.argv)
+	#unit_test_3()
+	
