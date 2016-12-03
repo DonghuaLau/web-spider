@@ -19,6 +19,7 @@ class AmazonKeywordRank:
 	_keywords = ''
 	_search_url_prefix = ''
 	_search_url = '' # _search_url_prefix + keyword
+	_search_conditioins = [] # keyword, product name, producer
 
 	def __init__(self):
 		self._keywords = g_config.get('amazon', 'keywords')
@@ -31,6 +32,11 @@ class AmazonKeywordRank:
 		if(g_config.get('temp_dir') != None):
 			self._temp_dir = g_config.get('temp_dir')	
 
+		conditions = g_config.get('amazon', 'search_condition')
+		if(conditions != None):
+			self.load_search_conditions(conditions)
+		self.print_search_conditions()
+
 		# urlencode keywords
 		length = len(self._keywords)
 		for i in range(length):
@@ -41,6 +47,19 @@ class AmazonKeywordRank:
 		g_logger.log(g_logger.DEBUG, "AmazonKeywordRank init, search_url_prefix: %s" , self._search_url_prefix)
 		g_logger.log(g_logger.DEBUG, "AmazonKeywordRank init, phantomjs: %s" , self._phantomjs)
 
+	def load_search_conditions(self, cond_keys):
+		for cond in cond_keys:
+			value = g_config.get(cond)
+			if(value != None):
+				self._search_conditioins.append(value)
+
+	def print_search_conditions(self):
+		i = 1
+		for cond in self._search_conditioins:
+			g_logger.log(g_logger.DEBUG, "%d.keyword: %s, producer: %s, product name: %s" % (i, cond["keyword"], cond["producer"], cond["name"]))
+			i += 1
+		
+
 	def run(self):
 		url = ''
 		for keyword in self._keywords:
@@ -50,6 +69,8 @@ class AmazonKeywordRank:
 	def amazon_keyword_search(self, keyword):
 		url = self._search_url_prefix + keyword
 		g_logger.log(g_logger.DEBUG, "keyword search URL: %s" % url)
+		return  # for test
+
 		try:
 			browser = webdriver.PhantomJS(self._phantomjs)
 			browser.get(url)
@@ -59,9 +80,8 @@ class AmazonKeywordRank:
 	
 			# save source page
 			filename = self._temp_dir + "/" + keyword + ".html"
-			source = browser.page_source.encode('utf-8')
+			utils.save_html_source(browser, filename)
 			g_logger.log(g_logger.DEBUG, "[page] source filename: %s" % filename)
-			utils.save_html_page(source, filename)
 	
 			elem_id = "s-results-list-atf"
 			results_list = browser.find_element_by_id(elem_id)
@@ -69,7 +89,7 @@ class AmazonKeywordRank:
 	
 			# screenshot
 			filename = self._temp_dir + "/" + keyword + ".png"
-			results_list.screenshot(filename)
+			utils.save_page_screenshot(results_list, filename)
 			g_logger.log(g_logger.DEBUG, "[screenshot] %s" % filename)
 	
 			title_link_class = "s-access-detail-page"

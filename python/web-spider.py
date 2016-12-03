@@ -10,7 +10,7 @@ def run():
 	# do something
 	akr = AmazonKeywordRank()
 	g_logger.info("application started.")
-	#akr.run()
+	akr.run()
 
 run()
 

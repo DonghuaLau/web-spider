@@ -1,23 +1,42 @@
 {
-    "log": {
+	 "phantomjs": "/usr/local/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
+	,"timeout": 600
+	,"temp_dir": "temp"
+	,"captcha_enable": 1 
+    ,"log": {
 		 "filename": "data.log"
 		,"path": "log/"
 		,"level": 10
 		,"max_filesize": 104857600
 	}
-
-    ,"amazon": {
-		 "search_url_prefix": "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords="
-		,"keywords": ["led light", "iphone 7", "C++ Primer"]
-	}
-
 	,"email":{
 		 "smtp_host": ""
 		,"imap_host": ""
 		,"user": ""
 		,"password": ""
 	}
-	,"phantomjs": "/usr/local/phantomjs-2.1.1-linux-x86_64/bin/phantomjs"
-	,"timeout": 600
-	,"temp_dir": "temp"
+    ,"amazon": {
+		 "search_url_prefix": "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Daps&field-keywords="
+		,"search_results_id": "s-results-list-atf"
+		,"search_results_class": ""
+		,"search_item_xpath": "./div/div/div/div/div/a"
+		,"keywords": ["led light", "iphone 7", "C++ Primer"]
+		,"search_condition": ["cond1", "cond2", "cond3"] 
+	}
+	,"cond1": {
+		 "keyword": "led light"
+		,"name": "Philips 461129 60 Watt Equivalent Soft White A19 LED Light Bulb, 16-Pack"
+		,"producer": "Philips"
+	}
+	,"cond2": {
+		 "keyword": "iphone 7"
+		,"name": "Apple iPhone 7 Unlocked Phone 32 GB - US Version (Black)"
+		,"producer": "Apple"
+	}
+	,"cond3": {
+		 "keyword": "C++ Primer"
+		,"name": "C++ Primer (5th Edition)"
+		,"producer": "Stanley B. Lippman and Josée Lajoie"
+	}
+
 }
