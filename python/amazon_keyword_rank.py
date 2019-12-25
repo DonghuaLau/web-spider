@@ -51,7 +51,7 @@ class AmazonKeywordRank:
 		for cond in cond_keys:
 			value = g_config.get(cond)
 			if(value != None):
-				self._search_conditioins.append(value)
+				self._search_conditioins.append(urllib.quote(value))
 
 	def print_search_conditions(self):
 		i = 1
